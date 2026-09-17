@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('subject');
             $table->text('description')->nullable();
             $table->timestamp('occurred_at')->useCurrent();
-            $table->jsonb('metadata')->nullable();
+            $table->json('metadata')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

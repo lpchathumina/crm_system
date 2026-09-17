@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('priority', 20)->default('medium');
             $table->timestamp('due_date')->nullable();
             $table->timestamp('completed_at')->nullable();
-            $table->jsonb('tags')->nullable();
+            $table->json('tags')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

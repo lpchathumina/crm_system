@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->string('plan', 50)->default('free');
             $table->string('timezone', 50)->default('UTC');
-            $table->jsonb('settings')->nullable();
+            $table->json('settings')->nullable();
             $table->timestamps();
 
             $table->index(['slug', 'is_active']);

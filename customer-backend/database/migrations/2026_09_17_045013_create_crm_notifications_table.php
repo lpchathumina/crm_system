@@ -13,7 +13,20 @@ return new class extends Migration
     {
         Schema::create('crm_notifications', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('org_users')->cascadeOnDelete();
+            $table->string('type', 100);
+            $table->string('title');
+            $table->text('message');
+            $table->json('data')->nullable();
+            $table->boolean('is_read')->default(false);
+            $table->timestamp('read_at')->nullable();
+            $table->nullableMorphs('notifiable');
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index(['organization_id', 'user_id', 'is_read']);
+            $table->index(['organization_id', 'created_at']);
         });
     }
 

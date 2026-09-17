@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('title', 100)->nullable();
             $table->string('department', 100)->nullable();
             $table->boolean('is_primary')->default(false);
-            $table->jsonb('tags')->nullable();
-            $table->jsonb('social_links')->nullable();
-            $table->jsonb('custom_fields')->nullable();
+            $table->json('tags')->nullable();
+            $table->json('social_links')->nullable();
+            $table->json('custom_fields')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

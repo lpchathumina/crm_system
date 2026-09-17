@@ -4,8 +4,8 @@ FROM php:8.4-fpm-alpine
 RUN apk add --no-cache \
     nginx \
     supervisor \
-    postgresql-client \
-    libpq-dev \
+    mysql-client \
+    mariadb-connector-c-dev \
     libzip-dev \
     zip \
     unzip \
@@ -17,8 +17,7 @@ RUN apk add --no-cache \
 # Install PHP extensions
 RUN docker-php-ext-install \
     pdo \
-    pdo_pgsql \
-    pgsql \
+    pdo_mysql \
     zip \
     mbstring \
     bcmath \

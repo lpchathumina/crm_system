@@ -21,8 +21,8 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->string('plan', 50)->default('free');
             $table->string('timezone', 50)->default('UTC');
-            $table->jsonb('settings')->nullable();
-            $table->jsonb('metadata')->nullable();
+            $table->json('settings')->nullable();
+            $table->json('metadata')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

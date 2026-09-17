@@ -20,8 +20,8 @@ return new class extends Migration
             $table->decimal('estimated_value', 15, 2)->nullable();
             $table->unsignedTinyInteger('probability')->nullable();
             $table->date('expected_close_date')->nullable();
-            $table->jsonb('tags')->nullable();
-            $table->jsonb('custom_fields')->nullable();
+            $table->json('tags')->nullable();
+            $table->json('custom_fields')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

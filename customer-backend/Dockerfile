@@ -1,10 +1,10 @@
 FROM php:8.4-fpm-alpine
 
 RUN apk add --no-cache \
-    nginx supervisor postgresql-client libpq-dev \
+    nginx supervisor mysql-client mariadb-connector-c-dev \
     libzip-dev zip unzip git curl oniguruma-dev
 
-RUN docker-php-ext-install pdo pdo_pgsql pgsql zip mbstring bcmath opcache pcntl sockets
+RUN docker-php-ext-install pdo pdo_mysql zip mbstring bcmath opcache pcntl sockets
 
 RUN apk add --no-cache autoconf g++ make \
     && pecl install redis \

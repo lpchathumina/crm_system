@@ -18,12 +18,12 @@ return new class extends Migration
             $table->string('action', 50);
             $table->string('model_type')->nullable();
             $table->unsignedBigInteger('model_id')->nullable();
-            $table->jsonb('old_values')->nullable();
-            $table->jsonb('new_values')->nullable();
+            $table->json('old_values')->nullable();
+            $table->json('new_values')->nullable();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->text('description')->nullable();
-            $table->jsonb('tags')->nullable();
+            $table->json('tags')->nullable();
             $table->timestamp('created_at')->useCurrent();
 
             $table->index(['user_id', 'created_at']);

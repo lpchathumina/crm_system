@@ -22,8 +22,8 @@ return new class extends Migration
             $table->date('expected_close_date')->nullable();
             $table->date('actual_close_date')->nullable();
             $table->string('lost_reason')->nullable();
-            $table->jsonb('tags')->nullable();
-            $table->jsonb('custom_fields')->nullable();
+            $table->json('tags')->nullable();
+            $table->json('custom_fields')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

@@ -25,9 +25,9 @@ return new class extends Migration
             $table->string('status', 50)->default('active');
             $table->string('source', 50)->nullable();
             $table->string('avatar')->nullable();
-            $table->jsonb('tags')->nullable();
+            $table->json('tags')->nullable();
             $table->text('notes')->nullable();
-            $table->jsonb('custom_fields')->nullable();
+            $table->json('custom_fields')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

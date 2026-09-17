@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+vendor/
+.pnp
+.pnp.*
+
+# Next.js
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment variables
+.env
+.env.backup
+.env.production
+.env.local
+.env.*.local
+!.env.example
+
+# Laravel storage & cache
+storage/*.key
+storage/pail
+public/storage
+public/hot
+public/build
+
+# Logs and databases
+*.log
+*.sqlite
+.phpunit.result.cache
+.phpunit.cache
+
+# IDE & OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
