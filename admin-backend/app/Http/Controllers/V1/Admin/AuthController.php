@@ -56,6 +56,15 @@ class AuthController extends Controller
             now()->addDays((int) config('sanctum.admin_token_expiry_days', 1))
         );
 
+        // Audit log login
+        \App\Infrastructure\Logging\AuditLogger::log(
+            action: 'login',
+            description: "Admin {$user->name} logged in successfully.",
+            modelType: 'AdminUser',
+            modelId: $user->id,
+            userId: $user->id
+        );
+
         return $this->successResponse([
             'token' => $token->plainTextToken,
             'token_type' => 'Bearer',
@@ -82,6 +91,17 @@ class AuthController extends Controller
     )]
     public function logout(Request $request): JsonResponse
     {
+        $user = $request->user();
+        if ($user) {
+            \App\Infrastructure\Logging\AuditLogger::log(
+                action: 'logout',
+                description: "Admin {$user->name} logged out.",
+                modelType: 'AdminUser',
+                modelId: $user->id,
+                userId: $user->id
+            );
+        }
+
         $request->user()->currentAccessToken()->delete();
 
         return $this->successResponse(null, 'Logged out successfully');
@@ -109,5 +129,64 @@ class AuthController extends Controller
             'permissions' => $user->getAllPermissions()->pluck('name'),
             'last_login_at' => $user->last_login_at,
         ]);
+    }
+
+    public function changePassword(Request $request): JsonResponse
+    {
+        $request->validate([
+            'current_password' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = $request->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return $this->errorResponse('Current password does not match.', 422);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        \App\Infrastructure\Logging\AuditLogger::log(
+            action: 'password_change',
+            description: "Admin {$user->name} changed password.",
+            modelType: 'AdminUser',
+            modelId: $user->id,
+            userId: $user->id
+        );
+
+        return $this->successResponse(null, 'Password changed successfully');
+    }
+
+    public function updateProfile(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:admin_users,email,' . $user->id],
+        ]);
+
+        $oldValues = ['name' => $user->name, 'email' => $user->email];
+        $user->update($validated);
+
+        \App\Infrastructure\Logging\AuditLogger::log(
+            action: 'profile_update',
+            description: "Admin {$user->name} updated profile details.",
+            modelType: 'AdminUser',
+            modelId: $user->id,
+            oldValues: $oldValues,
+            newValues: $validated,
+            userId: $user->id
+        );
+
+        return $this->successResponse([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'roles' => $user->getRoleNames(),
+            'permissions' => $user->getAllPermissions()->pluck('name'),
+        ], 'Profile updated successfully');
     }
 }

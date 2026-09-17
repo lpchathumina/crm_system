@@ -7,7 +7,7 @@ import axios from 'axios';
  * It must NEVER be pointed at admin-backend.
  */
 const customerApiClient = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/customer`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8002'}/api/v1/customer`,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',

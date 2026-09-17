@@ -81,4 +81,16 @@ class TaskController extends Controller
         Task::findOrFail($id)->delete();
         return $this->successResponse(null, 'Task deleted');
     }
+
+    public function toggleComplete(int $id): JsonResponse
+    {
+        $task = Task::findOrFail($id);
+        $isDone = $task->status === Task::STATUS_DONE;
+        $task->update([
+            'status' => $isDone ? Task::STATUS_TODO : Task::STATUS_DONE,
+            'completed_at' => $isDone ? null : now(),
+        ]);
+
+        return $this->successResponse($task, 'Task status updated');
+    }
 }

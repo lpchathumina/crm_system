@@ -14,6 +14,8 @@ class AuditLog extends Model
 
     protected $table = 'audit_logs';
 
+    const UPDATED_AT = null;
+
     public $updatable = false;
 
     protected $fillable = [

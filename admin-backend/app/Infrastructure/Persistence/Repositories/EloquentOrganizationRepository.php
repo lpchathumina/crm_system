@@ -48,7 +48,7 @@ class EloquentOrganizationRepository implements OrganizationRepositoryInterface
             $query->where('plan', $filters['plan']);
         }
 
-        return $query->withCount('users')->latest()->paginate($perPage);
+        return $query->latest()->paginate($perPage);
     }
 
     public function create(array $data): OrgEntity

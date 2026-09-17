@@ -4,6 +4,7 @@ use App\Http\Controllers\V1\Admin\AuthController;
 use App\Http\Controllers\V1\Admin\AuditLogController;
 use App\Http\Controllers\V1\Admin\DashboardController;
 use App\Http\Controllers\V1\Admin\OrganizationController;
+use App\Http\Controllers\V1\Admin\ReportController;
 use App\Http\Controllers\V1\Admin\RoleController;
 use App\Http\Controllers\V1\Admin\SettingController;
 use App\Http\Controllers\V1\Admin\UserController;
@@ -33,6 +34,8 @@ Route::prefix('v1/admin')->group(function () {
         Route::prefix('auth')->group(function () {
             Route::post('logout', [AuthController::class, 'logout'])->name('admin.auth.logout');
             Route::get('me', [AuthController::class, 'me'])->name('admin.auth.me');
+            Route::post('change-password', [AuthController::class, 'changePassword'])->name('admin.auth.change-password');
+            Route::put('profile', [AuthController::class, 'updateProfile'])->name('admin.auth.profile');
         });
 
         // Dashboard
@@ -48,6 +51,8 @@ Route::prefix('v1/admin')->group(function () {
         ]);
 
         // Organizations
+        Route::put('organizations/{id}/toggle-status', [OrganizationController::class, 'toggleStatus'])->name('admin.organizations.toggle');
+        Route::get('organizations/{id}/statistics', [OrganizationController::class, 'statistics'])->name('admin.organizations.statistics');
         Route::apiResource('organizations', OrganizationController::class)->names([
             'index' => 'admin.organizations.index',
             'store' => 'admin.organizations.store',
@@ -71,5 +76,8 @@ Route::prefix('v1/admin')->group(function () {
         // Settings
         Route::get('settings', [SettingController::class, 'index'])->name('admin.settings.index');
         Route::put('settings', [SettingController::class, 'update'])->name('admin.settings.update');
+
+        // Reports
+        Route::get('reports', [ReportController::class, 'index'])->name('admin.reports.index');
     });
 });

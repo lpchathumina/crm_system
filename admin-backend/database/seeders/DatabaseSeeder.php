@@ -86,5 +86,46 @@ class DatabaseSeeder extends Seeder
         foreach ($settings as $setting) {
             SystemSetting::firstOrCreate(['key' => $setting['key']], $setting);
         }
+
+        // Seed tenant organizations
+        $orgs = [
+            [
+                'name' => 'Acme Corporation',
+                'slug' => 'acme-corp',
+                'email' => 'contact@acme.example.com',
+                'phone' => '+1-555-0100',
+                'website' => 'https://acme.example.com',
+                'is_active' => true,
+                'plan' => 'enterprise',
+                'timezone' => 'America/New_York',
+            ],
+            [
+                'name' => 'Global Tech Solutions',
+                'slug' => 'global-tech',
+                'email' => 'info@globaltech.example.com',
+                'phone' => '+1-555-0200',
+                'website' => 'https://globaltech.example.com',
+                'is_active' => true,
+                'plan' => 'professional',
+                'timezone' => 'Europe/London',
+            ],
+            [
+                'name' => 'Apex Cloud Systems',
+                'slug' => 'apex-cloud',
+                'email' => 'sales@apexcloud.io',
+                'phone' => '+1-555-0300',
+                'website' => 'https://apexcloud.io',
+                'is_active' => true,
+                'plan' => 'starter',
+                'timezone' => 'America/Chicago',
+            ]
+        ];
+
+        foreach ($orgs as $orgData) {
+            \App\Infrastructure\Persistence\Eloquent\Models\Organization::firstOrCreate(
+                ['slug' => $orgData['slug']],
+                $orgData
+            );
+        }
     }
 }

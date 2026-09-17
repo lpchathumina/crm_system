@@ -1,13 +1,16 @@
 <?php
 
+use App\Http\Controllers\V1\Customer\ActivityController;
 use App\Http\Controllers\V1\Customer\AuthController;
 use App\Http\Controllers\V1\Customer\ContactController;
 use App\Http\Controllers\V1\Customer\CustomerController;
 use App\Http\Controllers\V1\Customer\DashboardController;
 use App\Http\Controllers\V1\Customer\DealController;
 use App\Http\Controllers\V1\Customer\LeadController;
+use App\Http\Controllers\V1\Customer\NoteController;
 use App\Http\Controllers\V1\Customer\NotificationController;
 use App\Http\Controllers\V1\Customer\ReportController;
+use App\Http\Controllers\V1\Customer\SearchController;
 use App\Http\Controllers\V1\Customer\TaskController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +39,12 @@ Route::prefix('v1/customer')->group(function () {
         Route::prefix('auth')->group(function () {
             Route::post('logout', [AuthController::class, 'logout'])->name('customer.auth.logout');
             Route::get('me', [AuthController::class, 'me'])->name('customer.auth.me');
+            Route::post('change-password', [AuthController::class, 'changePassword'])->name('customer.auth.change-password');
+            Route::put('profile', [AuthController::class, 'updateProfile'])->name('customer.auth.profile');
         });
+
+        // Global Search
+        Route::get('search', [SearchController::class, 'search'])->name('customer.search');
 
         // Dashboard
         Route::get('dashboard', [DashboardController::class, 'index'])->name('customer.dashboard');
@@ -59,7 +67,8 @@ Route::prefix('v1/customer')->group(function () {
             'destroy' => 'customer.contacts.destroy',
         ]);
 
-        // Leads
+        // Leads & Conversion
+        Route::post('leads/{id}/convert', [LeadController::class, 'convert'])->name('customer.leads.convert');
         Route::apiResource('leads', LeadController::class)->names([
             'index' => 'customer.leads.index',
             'store' => 'customer.leads.store',
@@ -68,8 +77,10 @@ Route::prefix('v1/customer')->group(function () {
             'destroy' => 'customer.leads.destroy',
         ]);
 
-        // Deals (CRM Pipeline)
+        // Deals & Pipeline
         Route::get('deals/pipeline', [DealController::class, 'pipeline'])->name('customer.deals.pipeline');
+        Route::get('pipeline', [DealController::class, 'pipeline'])->name('customer.pipeline');
+        Route::get('opportunities', [DealController::class, 'index'])->name('customer.opportunities.index');
         Route::put('deals/{id}/stage', [DealController::class, 'updateStage'])->name('customer.deals.stage');
         Route::apiResource('deals', DealController::class)->names([
             'index' => 'customer.deals.index',
@@ -80,12 +91,30 @@ Route::prefix('v1/customer')->group(function () {
         ]);
 
         // Tasks
+        Route::put('tasks/{id}/toggle', [TaskController::class, 'toggleComplete'])->name('customer.tasks.toggle');
         Route::apiResource('tasks', TaskController::class)->names([
             'index' => 'customer.tasks.index',
             'store' => 'customer.tasks.store',
             'show' => 'customer.tasks.show',
             'update' => 'customer.tasks.update',
             'destroy' => 'customer.tasks.destroy',
+        ]);
+
+        // Activities
+        Route::apiResource('activities', ActivityController::class)->only(['index', 'store', 'show', 'destroy'])->names([
+            'index' => 'customer.activities.index',
+            'store' => 'customer.activities.store',
+            'show' => 'customer.activities.show',
+            'destroy' => 'customer.activities.destroy',
+        ]);
+
+        // Notes
+        Route::apiResource('notes', NoteController::class)->names([
+            'index' => 'customer.notes.index',
+            'store' => 'customer.notes.store',
+            'show' => 'customer.notes.show',
+            'update' => 'customer.notes.update',
+            'destroy' => 'customer.notes.destroy',
         ]);
 
         // Notifications
